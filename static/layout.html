@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+<title>The super amazing password thingy</title>
+<link rel=stylesheet type=text/css href="static/style.css">
+<script
+src="http://code.jquery.com/jquery-3.2.1.js"
+integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+crossorigin="anonymous"></script>
+<script>
+	function api ( minChar, emojimovie ) {
+		var password = $.post("/api",{minimum: minChar, emoji: emojimovie});
+		password.done(function(data) { 
+			var content = $( data ).find( "content" );
+			$( "#password" ).empty().append( data );
+		});
+	}
+	function moar_onClick( jQuery ) {
+		event.preventDefault();
+		var $form = $( "#newSettings" ),
+			minChar = $form.find( "input[name='minimum']" ).val(),
+			url = $form.attr( "action" );
+		if($form.find( "input[name='emoji']").is(':checked')){
+			emojimovie = "on";
+		}else{
+			emojimovie = "off";
+		};
+		api(minChar, emojimovie)
+	}
+	$( document ).ready( api("12","off") );
+</script>
+</head>
+<body>
+	<div class=page>
+		<h1>The extremely neato password thingy</h1>
+		<div class=boringtext>
+			<p>This page does a thing</p>
+		</div>
+		<div id="password" class=meatandpotatoes>
+			{{.password}}
+		</div>
+		<div class="numbers">
+				<form id="newSettings">
+					Character minimum: <input type="number" name="minimum"><p/>
+					Emojis?: <input type="checkbox" name="emoji"><p/>
+				</form>
+			<div class=moar>
+					<a href="#" onclick="moar_onClick()">MOAR!</a>
+			</div>
+		</div>
+
+		<div class=debug>
+			<p>Hostname: {{.hostname}}</p>
+		</div>
+		</body>
+</html>
